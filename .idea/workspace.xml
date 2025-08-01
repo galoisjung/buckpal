@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aaaf425c-3b6b-4fa8-b4e6-870fbbd424c4" name="변경" comment="임시 저장">
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/reflectoring/buckpal/application/domain/service/SendMoneyServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/io/reflectoring/buckpal/application/domain/ActivityWindowTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/reflectoring/buckpal/application/domain/ActivityWindowTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,6 +37,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "galoisjung"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/galoisjung/buckpal.git",
+    "accountId": "d803fbeb-44b6-4fd2-83d5-bc79afcc81c2"
+  }
+}]]></component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -51,6 +65,7 @@
   "keyToString": {
     "Downloaded.Files.Path.Enabled": "false",
     "Gradle.AccountTest.executor": "Run",
+    "Gradle.ActivityWindowTest.executor": "Run",
     "Gradle.소스 다운로드.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Repository.Attach.Annotations": "false",
@@ -95,7 +110,7 @@
       <option name="presentableId" value="Default" />
       <updated>1753834116893</updated>
       <workItem from="1753834118141" duration="3342000" />
-      <workItem from="1754026757952" duration="8633000" />
+      <workItem from="1754026757952" duration="11054000" />
     </task>
     <task id="LOCAL-00001" summary="임시 저장">
       <option name="closed" value="true" />
@@ -121,7 +136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754035735748</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="임시 저장">
+      <option name="closed" value="true" />
+      <created>1754035783031</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1754035783031</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
