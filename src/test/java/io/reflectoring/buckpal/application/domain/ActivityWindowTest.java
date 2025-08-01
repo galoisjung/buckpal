@@ -31,6 +31,11 @@ public class ActivityWindowTest {
         Assertions.assertThat(window.getEndTimeStamp()).isEqualTo(endDate());
     }
 
+    @Test
+    void calculatesBalance(){
+
+    }
+
 
     private LocalDateTime startDate() {
         return LocalDateTime.of(2019, 8, 3, 0, 0);
