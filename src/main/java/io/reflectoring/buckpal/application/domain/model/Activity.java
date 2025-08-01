@@ -5,7 +5,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Value
@@ -19,24 +18,24 @@ public class Activity {
     @NonNull
     private final Account.AccountId ownerAccountId;
 
-
     @Getter
     @NonNull
     private final Account.AccountId sourceAccountId;
-
 
     @Getter
     @NonNull
     private final Account.AccountId targetAccountId;
 
-
     @Getter
     @NonNull
     private final LocalDateTime timestamp;
 
+    @Getter
+    @NonNull
     private final Money money;
 
 
+    // @RequiredArgsConstructor가 있는데 굳이 이렇게 만든 이유는? id = null로 하려고?
     public Activity(
             @NonNull Account.AccountId ownerAccountId,
             @NonNull Account.AccountId sourceAccountId,
@@ -51,9 +50,10 @@ public class Activity {
         this.money = money;
     }
 
-
     @Value
     public static class ActivityId {
         private final Long value;
     }
+
+
 }
