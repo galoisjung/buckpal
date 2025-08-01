@@ -1,4 +1,7 @@
 package io.reflectoring.buckpal.application.port.out;
 
-public class UpdateAccountStatePort {
+import io.reflectoring.buckpal.application.domain.model.Account;
+
+public interface UpdateAccountStatePort {
+    void updateActivities(Account account);
 }
