@@ -1,5 +1,6 @@
 package io.reflectoring.buckpal.application.domain.service;
 
+import io.reflectoring.buckpal.application.domain.model.Account.AccountId;
 import io.reflectoring.buckpal.application.domain.model.Account;
 import io.reflectoring.buckpal.application.domain.model.Money;
 import io.reflectoring.buckpal.application.port.in.SendMoneyCommand;
@@ -7,11 +8,14 @@ import io.reflectoring.buckpal.application.port.out.AccountLock;
 import io.reflectoring.buckpal.application.port.out.LoadAccountPort;
 import io.reflectoring.buckpal.application.port.out.UpdateAccountStatePort;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.*;
@@ -27,6 +31,34 @@ public class SendMoneyServiceTest {
 
     private final SendMoneyService sendMoneyService =
             new SendMoneyService(loadAccountPort, updateAccountStatePort, accountLock, moneyTransferProperties());
+
+
+    @Test
+    void givenWithdrawalFails_thenOnlySourceAccountIsLockedAndReleased() {
+
+        AccountId sourceAccountId = new AccountId(41L);
+        Account sourceAccount = givenAnAccountWithId(sourceAccountId);
+
+        AccountId targetAccountId = new AccountId(42L);
+        Account targetAccount = givenAnAccountWithId(targetAccountId);
+
+        givenWithdrawWillFail(sourceAccount);
+        givenDepositWillSucceed(targetAccount);
+
+        SendMoneyCommand command = new SendMoneyCommand(
+                sourceAccountId,
+                targetAccountId,
+                Money.of(300L));
+
+        boolean success = sendMoneyService.sendMoney(command);
+
+        assertThat(success).isFalse();
+
+        then(accountLock).should().lockAccount(eq(sourceAccountId));
+        then(accountLock).should().releaseAccount(eq(sourceAccountId));
+        then(accountLock).should(times(0)).lockAccount(eq(targetAccountId));
+
+    }
 
     @Test
     void transactionSucceeds() {
@@ -46,13 +78,35 @@ public class SendMoneyServiceTest {
         boolean success = sendMoneyService.sendMoney(command);
         assertThat(success).isTrue();
 
-        Account.AccountId sourceAccountId = sourceAccount.getId().get();
-        Account.AccountId targetAccountId = targetAccount.getId().get();
+        AccountId sourceAccountId = sourceAccount.getId().get();
+        AccountId targetAccountId = targetAccount.getId().get();
 
-        then(accountLock).should().lockAccount(sourceAccountId);
+        then(accountLock).should().lockAccount(eq(sourceAccountId));
+        then(sourceAccount).should().withdraw(eq(money), eq(targetAccountId));
+        then(accountLock).should().releaseAccount(eq(sourceAccountId));
+
+        then(accountLock).should().lockAccount(eq(targetAccountId));
+        then(targetAccount).should().deposit(eq(money), eq(sourceAccountId));
+        then(accountLock).should().releaseAccount(eq(targetAccountId));
+
+        thenAccountsHaveBeenUpdated(sourceAccountId, targetAccountId);
+    }
 
 
+    private void thenAccountsHaveBeenUpdated(AccountId... accountIds) {
+        ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
+        then(updateAccountStatePort).should(times(accountIds.length))
+                .updateActivities(accountCaptor.capture());
 
+        List<AccountId> updateAccountIds = accountCaptor.getAllValues()
+                .stream()
+                .map(Account::getId)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        for (AccountId accountId : accountIds) {
+            assertThat(updateAccountIds).contains(accountId);
+        }
     }
 
     private void givenDepositWillSucceed(Account account) {
@@ -68,16 +122,17 @@ public class SendMoneyServiceTest {
 
     private void givenWithdrawWillSucceed(Account account) {
         given(account.withdraw(any(Money.class), any(Account.AccountId.class)))
+                .willReturn(true);
     }
 
 
     private Account givenTargetAccount() {
-        return givenAnAccountWithId(new Account.AccountId(42L));
+        return givenAnAccountWithId(new AccountId(42L));
     }
 
 
     private Account givenSourceAccount() {
-        return givenAnAccountWithId(new Account.AccountId(41L));
+        return givenAnAccountWithId(new AccountId(41L));
     }
 
     private Account givenAnAccountWithId(Account.AccountId id) {
