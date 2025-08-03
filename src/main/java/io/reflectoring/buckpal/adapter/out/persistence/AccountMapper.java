@@ -4,10 +4,12 @@ import io.reflectoring.buckpal.application.domain.model.Account;
 import io.reflectoring.buckpal.application.domain.model.Activity;
 import io.reflectoring.buckpal.application.domain.model.ActivityWindow;
 import io.reflectoring.buckpal.application.domain.model.Money;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class AccountMapper {
 
     Account mapToDomainEntity(
